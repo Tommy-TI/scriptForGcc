@@ -1,0 +1,44 @@
+#!/bin/bash
+#script allowing to compile all the .c code in a repository or all the .c file given in arguments
+#parameters: path to the repository or path to each .c file
+
+#string who's going to contain all the path for each files to compile
+string=""
+itterator=1
+#name of the current user
+user=`whoami`
+
+#repository option
+if [ -d $1 ] && [ $# -eq 1 ]
+then
+	#take all the .c files of the repository and put their path in the string with a space between each
+	while [ `find $1 -name "*.c"|sed -n "$itterator"p` ]
+	do
+		string=$string" "`find $1 -name "*.c"|sed -n "$itterator"p`
+		let "itterator++"
+	done
+
+	#compile the code and remove the .o file after
+	gcc -Wall $string -lm -o executeC.o
+	./executeC.o
+	rm executeC.o
+
+#files option
+elif [ $# -ge 1 ] && [ -f $@ ]
+then
+	#take all the arguments and add them to the string with a space bethween each
+	for var in "$@"
+	do
+		string=$string" ""$var"
+	done
+
+	#compile the .c code and remove the .o file after
+	gcc -Wall $string -lm -o executeC.o
+	./executeC.o
+	rm executeC.o
+	
+#else write what the user have to enter
+else
+
+	echo "please enter only 1 repository with only the .c files you want to compile in it or list all the .c files"
+fi
