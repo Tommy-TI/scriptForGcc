@@ -5,8 +5,6 @@
 #string who's going to contain all the path for each files to compile
 string=""
 itterator=1
-#name of the current user
-user=`whoami`
 
 #repository option
 if [ -d $1 ] && [ $# -eq 1 ]
